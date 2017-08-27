@@ -11,20 +11,20 @@ if (!empty($_POST["description"])) {
     $sql = "INSERT INTO `tasks` (`id`, `description`, `is_done`, `date_added`) VALUES (NULL,'$description','$is_done','$date_added') ";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
-    header( 'Location: ./exe.php');
+    header( 'Location: ./lesson4.2.php');
 }
 if (!empty($_GET['id']) && !empty($_GET['exo'])) {
     if ($_GET['exo'] == 'delete') {
         $sql = "DELETE FROM `tasks` WHERE id = ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(["{$_GET['id']}"]);
-        header( 'Location: ./exe.php');
+        header( 'Location: ./lesson4.2.php');
     }
     if ($_GET['exo'] == 'updvalue'){
         $sql = "UPDATE `tasks` SET is_done = 1 WHERE id = ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(["{$_GET['id']}"]);
-        header( 'Location: ./exe.php');
+        header( 'Location: ./lesson4.2.php');
 
     }
 }
