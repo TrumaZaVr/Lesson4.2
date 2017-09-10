@@ -8,7 +8,7 @@ if (!empty($_POST["description"])) {
     $stmt->bindValue(1, NULL, PDO::PARAM_INT);
     $stmt->bindValue(2, $_POST["description"], PDO::PARAM_STR);
     $stmt->bindValue(3, 0, PDO::PARAM_INT);
-    $stmt->bindValue(4, "", PDO::PARAM_STR);
+    $stmt->bindValue(4, date('Y-m-d H:i:s'), PDO::PARAM_STR);
     $stmt->execute();
 }
 if (!empty($_GET['id']) && !empty($_GET['exo'])) {
