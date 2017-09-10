@@ -2,32 +2,32 @@
 $pdo = new PDO("mysql:host=localhost;dbname=lesson4.2;charset=utf8", "root", "", [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 ]);
-$pdo->exec("SET NAMES utf8;");
-$sql = "SELECT * FROM tasks";
 if (!empty($_POST["description"])) {
-    $description = ($_POST["description"]);
-    $is_done = 0;
-    $date_added = date("Y-m-d H:i:s");
-    $sql = "INSERT INTO `tasks` (`id`, `description`, `is_done`, `date_added`) VALUES (NULL,'$description','$is_done','$date_added') ";
+    $sql = "INSERT INTO `tasks` (`id`, `description`, `is_done`, `date_added`) VALUES (?,?,?,?) ";
     $stmt = $pdo->prepare($sql);
+    $stmt->bindValue(1, NULL, PDO::PARAM_INT);
+    $stmt->bindValue(2, $_POST["description"], PDO::PARAM_STR);
+    $stmt->bindValue(3, 0, PDO::PARAM_INT);
+    $stmt->bindValue(4, "", PDO::PARAM_STR);
     $stmt->execute();
-    header( 'Location: ./lesson4.2.php');
 }
 if (!empty($_GET['id']) && !empty($_GET['exo'])) {
     if ($_GET['exo'] == 'delete') {
-        $sql = "DELETE FROM `tasks` WHERE id = ?";
+        $sql = "DELETE FROM `tasks` WHERE `id` = ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(["{$_GET['id']}"]);
-        header( 'Location: ./lesson4.2.php');
     }
     if ($_GET['exo'] == 'updvalue'){
-        $sql = "UPDATE `tasks` SET is_done = 1 WHERE id = ?";
+        $sql = "UPDATE `tasks` SET is_done = 1 WHERE `id` = ?";
         $stmt = $pdo->prepare($sql);
         $stmt->execute(["{$_GET['id']}"]);
-        header( 'Location: ./lesson4.2.php');
 
     }
 }
+$sqlObj = "SELECT * FROM `tasks`";
+$stmObj = $pdo->prepare($sqlObj);
+$stmObj->execute();
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -60,10 +60,7 @@ if (!empty($_GET['id']) && !empty($_GET['exo'])) {
         <th>Управление</th>
     </tr>
     <?php
-    $sql = "SELECT * FROM `tasks`";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-        foreach ($stmt as $obj) { ?>
+    foreach ($stmObj as $obj) { ?>
         <tr>
             <td><?php echo htmlspecialchars($obj['description']); ?></td>
             <td><?php echo htmlspecialchars($obj['date_added']); ?></td>
