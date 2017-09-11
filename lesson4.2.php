@@ -3,12 +3,11 @@ $pdo = new PDO("mysql:host=localhost;dbname=lesson4.2;charset=utf8", "root", "",
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
 ]);
 if (!empty($_POST["description"])) {
-    $sql = "INSERT INTO `tasks` (`id`, `description`, `is_done`, `date_added`) VALUES (?,?,?,?) ";
+    $sql = "INSERT INTO `tasks` (`id`, `description`, `is_done`, `date_added`) VALUES (?,?,?,NOW()) ";
     $stmt = $pdo->prepare($sql);
     $stmt->bindValue(1, NULL, PDO::PARAM_INT);
     $stmt->bindValue(2, $_POST["description"], PDO::PARAM_STR);
     $stmt->bindValue(3, 0, PDO::PARAM_INT);
-    $stmt->bindValue(4, date('Y-m-d H:i:s'), PDO::PARAM_STR);
     $stmt->execute();
 }
 if (!empty($_GET['id']) && !empty($_GET['exo'])) {
